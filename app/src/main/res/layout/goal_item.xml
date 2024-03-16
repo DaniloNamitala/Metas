@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="0dp"
+    android:orientation="horizontal"
+    android:background="@drawable/counter_background"
+    android:paddingHorizontal="10dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="3dp"
+    android:layout_height="@dimen/goal_item_height"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:id="@+id/options"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/option_edit"
+            android:layout_width="@dimen/goal_item_height"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_edit"
+            android:layout_marginEnd="6dp"
+            android:paddingVertical="10dp"
+            android:clickable="true"
+            app:tint="@color/white"
+            android:background="@drawable/options_background"
+            android:contentDescription="@string/edit_goal_desc"
+            android:focusable="true" />
+
+        <ImageView
+            android:id="@+id/option_delete"
+            android:layout_width="@dimen/goal_item_height"
+            android:layout_height="match_parent"
+            app:tint="@color/white"
+            android:clickable="true"
+            android:paddingVertical="10dp"
+            android:focusable="true"
+            android:background="@drawable/options_background"
+            android:src="@drawable/icon_delete"
+            android:contentDescription="@string/delete_goal_desc" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:trackThickness="@dimen/goal_item_height"
+            app:trackCornerRadius="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:trackColor="@color/white"
+            tools:indicatorColor="@color/primaryLight"
+            tools:min="0"
+            tools:max="10"
+            tools:progress="5"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitCenter"
+                tools:tint="#ff0000"
+                android:src="@drawable/icon_goal"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/decrement"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/primaryDark"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="Counter Name"/>
+
+            <TextView
+                android:id="@+id/count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:textColor="@color/primaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="0"/>
+
+            <ImageView
+                android:id="@+id/btn_decrement"
+                android:layout_width="@dimen/goal_item_height"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                app:tint="@color/primaryDark"
+                android:src="@drawable/icon_minus"
+                android:paddingHorizontal="15dp"
+                android:background="@drawable/options_background"
+                android:contentDescription="@string/decrement"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_increment"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_increment"
+                android:layout_width="@dimen/goal_item_height"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:paddingHorizontal="15dp"
+                android:src="@drawable/icon_add"
+                app:tint="@color/primaryDark"
+                android:background="@drawable/options_background"
+                android:contentDescription="@string/increment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,26 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Metas" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/primaryLight</item>
+    </style>
+
+    <style name="Theme.Metas" parent="Base.Theme.Metas" />
+
+    <style name="Theme.Metas.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Metas.AppWidgetContainer" parent="Theme.Metas.AppWidgetContainerParent">
+        <item name="appWidgetRadius">0dp</item>
+        <item name="appWidgetInnerRadius">0dp</item>
+        <item name="appWidgetPadding">0dp</item>
+    </style>
+</resources>

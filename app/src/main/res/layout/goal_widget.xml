@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.Metas.AppWidgetContainer"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:id="@+id/goal_widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="35sp"
+        android:padding="20dp"
+        android:background="@drawable/counter_background"
+        android:backgroundTint="@color/darkGray"
+        android:textColor="@color/white"
+        android:text="@string/no_goals"/>
+
+    <ListView
+        android:id="@+id/widget_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        tools:listitem="@layout/goal_item_widget"/>
+</FrameLayout>
