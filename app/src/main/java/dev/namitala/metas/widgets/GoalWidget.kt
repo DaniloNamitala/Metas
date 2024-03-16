@@ -15,9 +15,12 @@ import dev.namitala.metas.repository.GoalsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.java.KoinJavaComponent
 
 
-class GoalWidget : AppWidgetProvider() {
+class GoalWidget : AppWidgetProvider(), KoinComponent {
     companion object {
         private const val ACTION_INCREMENT = "INTENT_INCREMENT"
         const val UPDATE_TYPE = "UPDATE_TYPE"
@@ -27,8 +30,6 @@ class GoalWidget : AppWidgetProvider() {
         const val DECREMENT = "DECREMENT"
         const val INCREMENT_SIZE = "INCREMENT_SIZE"
     }
-
-    private lateinit var repository : GoalsRepository
 
     override fun onUpdate(
         context: Context,
@@ -61,8 +62,7 @@ class GoalWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        repository = (context!!.applicationContext as GoalsApplication).goalsRepository
-
+        val repository : GoalsRepository by inject()
         if (intent != null) {
             when (intent.action) {
                 ACTION_INCREMENT -> {
@@ -74,7 +74,7 @@ class GoalWidget : AppWidgetProvider() {
                             val count = intent.getIntExtra(COUNT_KEY, 0)
                             CoroutineScope(Dispatchers.Main).launch {
                                 repository.incrementWidget(curName, count + multi)
-                                val widgetManager = AppWidgetManager.getInstance(context.applicationContext)
+                                val widgetManager = AppWidgetManager.getInstance(context!!.applicationContext)
                                 widgetManager.notifyAppWidgetViewDataChanged(
                                     widgetManager.getAppWidgetIds(
                                         ComponentName(

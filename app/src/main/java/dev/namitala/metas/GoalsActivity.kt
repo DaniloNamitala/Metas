@@ -4,18 +4,20 @@ import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.viewModels
 import android.os.Bundle
 import dev.namitala.metas.databinding.ActivityMainBinding
 import dev.namitala.metas.model.GoalItem
 import dev.namitala.metas.repository.GoalsRepository
 import dev.namitala.metas.viewmodel.GoalsViewModel
 import dev.namitala.metas.widgets.GoalWidget
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, GoalsAdapter.GoalsEventListener {
     private lateinit var binding : ActivityMainBinding
     private lateinit var goalsAdapter : GoalsAdapter
-    private val viewModel: GoalsViewModel by viewModels { GoalsViewModel.Factory }
+    private val viewModel: GoalsViewModel by viewModel()
+    private val aaaa: GoalsRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +41,7 @@ class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, G
         viewModel.goals.observe(this) {
             val manager = AppWidgetManager.getInstance(applicationContext)
             manager.notifyAppWidgetViewDataChanged(manager.getAppWidgetIds(ComponentName(applicationContext.packageName, GoalWidget::class.java.name)), R.id.widget_listView)
-        }
 
-        viewModel.goals.observe(this) {
             if (::goalsAdapter.isInitialized && it != null)
                 goalsAdapter.setList(it)
         }

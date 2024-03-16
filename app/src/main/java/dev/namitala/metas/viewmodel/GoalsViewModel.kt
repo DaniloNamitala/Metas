@@ -1,5 +1,7 @@
 package dev.namitala.metas.viewmodel
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +15,7 @@ import dev.namitala.metas.GoalsApplication
 import dev.namitala.metas.database.AppDatabase
 
 class GoalsViewModel(private val repository: GoalsRepository) : ViewModel() {
-    val goals : LiveData<List<GoalItem>> = repository.goalsLivedata
+    val goals : LiveData<List<GoalItem>> = repository.goalsLiveData()
 
     fun addGoal(goal : GoalItem, old : GoalItem?) {
         repository.setGoal(goal, old)
@@ -30,22 +32,6 @@ class GoalsViewModel(private val repository: GoalsRepository) : ViewModel() {
     fun deleteGoal(pos : Int) {
         goals.value?.get(pos)?.let { g ->
             repository.deleteGoal(g)
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
-            ): T {
-                val application = checkNotNull(extras[AndroidViewModelFactory.APPLICATION_KEY]) as GoalsApplication
-
-                return GoalsViewModel(
-                    GoalsRepository(application.database.goalDao()),
-                ) as T
-            }
         }
     }
 }

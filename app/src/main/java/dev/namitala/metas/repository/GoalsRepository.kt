@@ -1,68 +1,82 @@
 package dev.namitala.metas.repository
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import dev.namitala.metas.database.GoalDao
 import dev.namitala.metas.model.GoalItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class GoalsRepository(private val goalsDao : GoalDao) {
+interface GoalsRepository {
+    fun setGoal(goal : GoalItem, old : GoalItem?)
+    fun update(idx : Int, goal : GoalItem)
+    fun incrementWidget(name : String, count : Int)
+    fun deleteGoal(goal : GoalItem)
+    fun getGoals() : List<GoalItem>
+    fun goalsLiveData() : LiveData<List<GoalItem>>
+}
+class GoalsRepositoryImpl(private val prefs : SharedPreferences) : GoalsRepository {
+
+    companion object {
+        const val GOALS_KEY = "GOALS_KEY"
+    }
+
+    private val gson = Gson()
+    private var goalsList : ArrayList<GoalItem> = ArrayList()
+    private var goalsLiveData : MutableLiveData<List<GoalItem>> = MutableLiveData(goalsList)
+
     init {
         loadGoals()
-    }
-
-    private var goalsList : ArrayList<GoalItem> = ArrayList()
-    val goals : List<GoalItem> = goalsList
-    val goalsLivedata : LiveData<List<GoalItem>> = goalsDao.getAllGoalsLiveData()
-
-    fun setGoal(goal : GoalItem, old : GoalItem?) {
-        if (old == null) {
-            goalsList.add(goal)
-            CoroutineScope(Dispatchers.IO).launch {
-                goalsDao.insert(goal).let {
-                    goal.id = it[0]
-                }
-            }
-        } else {
-            val idx = goalsList.indexOf(old)
-            goalsList[idx] = goal
-            CoroutineScope(Dispatchers.IO).launch {
-                goalsDao.update(goal)
+        prefs.registerOnSharedPreferenceChangeListener { _, key ->
+            if (key == GOALS_KEY) {
+                goalsLiveData.value = goalsList
             }
         }
     }
 
-    fun update(idx : Int, goal : GoalItem) {
-        goalsList[idx] = goal
-        CoroutineScope(Dispatchers.IO).launch {
-            goalsDao.update(goal)
-        }
-    }
-
-    fun incrementWidget(name : String, count : Int) {
-        goalsList.find { it.name == name }?.let {
-            val idx = goalsList.indexOf(it)
-            goalsList[idx] = it.copy(count = count)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                goalsDao.update(goalsList[idx])
-            }
-        }
-    }
-
-    fun deleteGoal(goal : GoalItem) {
-        goalsList.remove(goal)
-        CoroutineScope(Dispatchers.IO).launch {
-            goalsDao.delete(goal)
-        }
+    private fun saveGoals() {
+        val goalSet = goalsList.map { gson.toJson(it) }.toSet()
+        prefs.edit().putStringSet(GOALS_KEY, goalSet).apply()
     }
 
     private fun loadGoals() {
-        CoroutineScope(Dispatchers.IO).launch {
-            goalsDao.getAllGoals().let {
-                goalsList.addAll(it)
-            }
+        val goalSet = prefs.getStringSet(GOALS_KEY, setOf())
+        goalSet?.map { gson.fromJson(it, GoalItem::class.java) }?.let { list ->
+            goalsList.addAll(list)
         }
+    }
+
+    override fun getGoals(): List<GoalItem> = goalsList
+
+    override fun goalsLiveData(): LiveData<List<GoalItem>> = goalsLiveData
+    override fun setGoal(goal : GoalItem, old : GoalItem?) {
+        if (old == null) {
+            goalsList.add(goal)
+        } else {
+            val idx = goalsList.indexOf(old)
+            goalsList[idx] = goal
+        }
+        saveGoals()
+    }
+
+    override fun update(idx : Int, goal : GoalItem) {
+        goalsList[idx] = goal
+        saveGoals()
+    }
+
+    override fun incrementWidget(name : String, count : Int) {
+        goalsList.find { it.name == name }?.let {
+            val idx = goalsList.indexOf(it)
+            goalsList[idx] = it.copy(count = count)
+        }
+        saveGoals()
+    }
+
+    override fun deleteGoal(goal : GoalItem) {
+        goalsList.remove(goal)
+        saveGoals()
     }
 }

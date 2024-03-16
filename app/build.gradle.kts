@@ -54,4 +54,6 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
+    implementation("com.google.code.gson:gson:2.10")
+    implementation("io.insert-koin:koin-android:3.5.0")
 }

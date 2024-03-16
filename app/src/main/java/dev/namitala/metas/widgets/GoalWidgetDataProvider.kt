@@ -5,9 +5,6 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService.RemoteViewsFactory
 import dev.namitala.metas.R
-import dev.namitala.metas.extensions.colorMultiply
-import dev.namitala.metas.extensions.isDarkColor
-import dev.namitala.metas.model.GoalItem
 import dev.namitala.metas.repository.GoalsRepository
 
 class GoalWidgetDataProvider    (
@@ -15,22 +12,10 @@ class GoalWidgetDataProvider    (
     private val repository : GoalsRepository
 ) : RemoteViewsFactory {
 
-    private val goals : ArrayList<GoalItem> = ArrayList()
-
-    override fun onCreate() {
-        repository.goalsLivedata.observeForever {
-            updateList(it)
-        }
-    }
-
-    private fun updateList(list : List<GoalItem>) {
-        goals.clear()
-        goals.addAll(list)
-        onDataSetChanged()
-    }
+    override fun onCreate() { }
 
     override fun onDataSetChanged() {
-        if (goals.isNotEmpty()) {
+        if (repository.getGoals().isNotEmpty()) {
             getViewAt(0)
         }
     }
@@ -38,12 +23,12 @@ class GoalWidgetDataProvider    (
     override fun onDestroy() { }
 
     override fun getCount(): Int {
-        return goals.size
+        return repository.getGoals().size
     }
 
     override fun getViewAt(position: Int): RemoteViews {
         val fillIntentAdd = Intent()
-        val goal = goals[position]
+        val goal = repository.getGoals()[position]
         fillIntentAdd.putExtra(GoalWidget.UPDATE_TYPE,GoalWidget.INCREMENT)
         fillIntentAdd.putExtra(GoalWidget.NAME_KEY, goal.name)
         fillIntentAdd.putExtra(GoalWidget.COUNT_KEY, goal.count)
