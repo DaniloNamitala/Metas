@@ -7,8 +7,8 @@ import dev.namitala.metas.repository.GoalsRepository
 class GoalsViewModel(private val repository: GoalsRepository) : ViewModel() {
     val goals : LiveData<List<GoalItem>> = repository.goalsLiveData()
 
-    fun addGoal(goal : GoalItem, old : GoalItem?) {
-        repository.setGoal(goal, old)
+    fun addGoal(goal : GoalItem, old : GoalItem?) : Int {
+        return repository.setGoal(goal, old)
     }
 
     fun incrementGoal(idx : Int, inc : Int) {
@@ -16,6 +16,14 @@ class GoalsViewModel(private val repository: GoalsRepository) : ViewModel() {
         goal?.let {
             val new = goal.copy(count = goal.count.plus(inc).coerceAtLeast(0))
             repository.update(idx, new)
+        }
+    }
+
+    fun restoreGoal(pos : Int) {
+        val goal = goals.value?.get(pos)
+        goal?.let {
+            val new = goal.copy(count = 0)
+            repository.update(pos, new)
         }
     }
 

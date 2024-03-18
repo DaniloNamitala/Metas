@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import dev.namitala.metas.model.GoalItem
+import java.util.Locale
 
 interface GoalsRepository {
-    fun setGoal(goal : GoalItem, old : GoalItem?)
+    fun setGoal(goal : GoalItem, old : GoalItem?) : Int
     fun update(idx : Int, goal : GoalItem)
     fun incrementWidget(name : String, count : Int)
     fun deleteGoal(goal : GoalItem)
@@ -41,21 +42,23 @@ class GoalsRepositoryImpl(private val prefs : SharedPreferences) : GoalsReposito
     private fun loadGoals() {
         val goalSet = prefs.getStringSet(GOALS_KEY, setOf())
         goalSet?.map { gson.fromJson(it, GoalItem::class.java) }?.let { list ->
-            goalsList.addAll(list.sortedBy { it.name })
+            goalsList.addAll(list.sortedBy { it.name.lowercase(Locale.ROOT) })
         }
     }
 
     override fun getGoals(): List<GoalItem> = goalsList
 
     override fun goalsLiveData(): LiveData<List<GoalItem>> = goalsLiveData
-    override fun setGoal(goal : GoalItem, old : GoalItem?) {
+    override fun setGoal(goal : GoalItem, old : GoalItem?) : Int {
         if (old == null) {
             goalsList.add(goal)
+            goalsList.sortBy { it.name.lowercase(Locale.ROOT) }
         } else {
             val idx = goalsList.indexOf(old)
             goalsList[idx] = goal
         }
         saveGoals()
+        return goalsList.indexOf(goal)
     }
 
     override fun update(idx : Int, goal : GoalItem) {

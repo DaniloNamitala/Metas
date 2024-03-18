@@ -49,6 +49,7 @@ class GoalsAdapter(
         private val content = view.content
         private val delete = view.optionDelete
         private val edit = view.optionEdit
+        private val restore = view.optionRestore
 
         private val handler = Handler(Looper.getMainLooper())
         private val hideRunnable = Runnable {
@@ -91,7 +92,7 @@ class GoalsAdapter(
                 eventListener.editGoal(layoutPosition)
             }
 
-             view.root.setOnLongClickListener {
+             view.content.setOnLongClickListener {
                  handler.removeCallbacks(hideRunnable)
                  content.animate().x(-(options.width.toFloat()+20))
                  handler.postDelayed(hideRunnable, 3000L)
@@ -100,6 +101,10 @@ class GoalsAdapter(
 
             increment.setOnClickListener {
                 eventListener.increment(layoutPosition, goal.increment)
+            }
+
+            restore.setOnClickListener {
+                eventListener.restoreGoal(layoutPosition)
             }
 
             decrement.setOnClickListener {
@@ -112,5 +117,6 @@ class GoalsAdapter(
         fun increment(position: Int, increment : Int)
         fun editGoal(position: Int)
         fun deleteGoal(position: Int)
+        fun restoreGoal(position: Int)
     }
 }

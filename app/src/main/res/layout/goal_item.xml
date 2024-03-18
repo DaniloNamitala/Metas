@@ -25,7 +25,6 @@
             android:layout_width="@dimen/goal_item_height"
             android:layout_height="match_parent"
             android:src="@drawable/icon_edit"
-            android:layout_marginEnd="6dp"
             android:paddingVertical="10dp"
             android:clickable="true"
             app:tint="@color/white"
@@ -44,10 +43,23 @@
             android:background="@drawable/options_background"
             android:src="@drawable/icon_delete"
             android:contentDescription="@string/delete_goal_desc" />
+
+        <ImageView
+            android:id="@+id/option_restore"
+            android:layout_width="@dimen/goal_item_height"
+            android:layout_height="match_parent"
+            app:tint="@color/white"
+            android:clickable="true"
+            android:paddingVertical="10dp"
+            android:focusable="true"
+            android:background="@drawable/options_background"
+            android:src="@drawable/icon_restore"
+            android:contentDescription="@string/restore_count" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
+        tools:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"

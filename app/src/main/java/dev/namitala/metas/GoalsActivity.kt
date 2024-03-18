@@ -60,12 +60,11 @@ class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, G
     }
 
     override fun addGoal(goal : GoalItem, old : GoalItem?) {
-        viewModel.addGoal(goal, old)
+        val pos = viewModel.addGoal(goal, old)
         if (old == null) {
-            viewModel.goals.value?.size?.let { goalsAdapter.notifyItemInserted(it) }
+            viewModel.goals.value?.size?.let { goalsAdapter.notifyItemInserted(pos) }
         } else {
-            val idx = viewModel.goals.value?.indexOf(goal) ?: 0
-            viewModel.goals.value?.size?.let { goalsAdapter.notifyItemChanged(idx) }
+            viewModel.goals.value?.size?.let { goalsAdapter.notifyItemChanged(pos) }
         }
     }
 
@@ -80,6 +79,11 @@ class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, G
             modal.listener = this
             modal.show(supportFragmentManager, NewGoalBottomSheet.MODAL_NAME)
         }
+    }
+
+    override fun restoreGoal(position: Int) {
+        viewModel.restoreGoal(position)
+        goalsAdapter.notifyItemChanged(position, viewModel.goals.value?.get(position))
     }
 
     override fun deleteGoal(position: Int) {

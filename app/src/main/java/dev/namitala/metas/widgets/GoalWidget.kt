@@ -71,7 +71,7 @@ class GoalWidget : AppWidgetProvider(), KoinComponent {
                             val multi = intent.getIntExtra(INCREMENT_SIZE, 1)
                             val count = intent.getIntExtra(COUNT_KEY, 0)
                             CoroutineScope(Dispatchers.Main).launch {
-                                repository.incrementWidget(curName, count + multi)
+                                repository.incrementWidget(curName, (count + multi.coerceAtLeast(0)))
                                 val widgetManager = AppWidgetManager.getInstance(context!!.applicationContext)
                                 widgetManager.notifyAppWidgetViewDataChanged(
                                     widgetManager.getAppWidgetIds(
