@@ -4,11 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import dev.namitala.metas.database.GoalDao
 import dev.namitala.metas.model.GoalItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 interface GoalsRepository {
     fun setGoal(goal : GoalItem, old : GoalItem?)
@@ -45,7 +41,7 @@ class GoalsRepositoryImpl(private val prefs : SharedPreferences) : GoalsReposito
     private fun loadGoals() {
         val goalSet = prefs.getStringSet(GOALS_KEY, setOf())
         goalSet?.map { gson.fromJson(it, GoalItem::class.java) }?.let { list ->
-            goalsList.addAll(list)
+            goalsList.addAll(list.sortedBy { it.name })
         }
     }
 

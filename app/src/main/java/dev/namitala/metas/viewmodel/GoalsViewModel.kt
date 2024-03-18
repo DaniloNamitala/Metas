@@ -1,19 +1,9 @@
 package dev.namitala.metas.viewmodel
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
 import dev.namitala.metas.model.GoalItem
 import dev.namitala.metas.repository.GoalsRepository
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import androidx.lifecycle.createSavedStateHandle
-import dev.namitala.metas.GoalsApplication
-import dev.namitala.metas.database.AppDatabase
-
 class GoalsViewModel(private val repository: GoalsRepository) : ViewModel() {
     val goals : LiveData<List<GoalItem>> = repository.goalsLiveData()
 

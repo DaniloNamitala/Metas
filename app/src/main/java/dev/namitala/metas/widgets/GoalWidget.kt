@@ -9,7 +9,6 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.RemoteViews
 import dev.namitala.metas.GoalsActivity
-import dev.namitala.metas.GoalsApplication
 import dev.namitala.metas.R
 import dev.namitala.metas.repository.GoalsRepository
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.java.KoinJavaComponent
 
 
 class GoalWidget : AppWidgetProvider(), KoinComponent {
