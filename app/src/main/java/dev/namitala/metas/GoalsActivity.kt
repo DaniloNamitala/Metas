@@ -3,8 +3,12 @@ package dev.namitala.metas
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.namitala.metas.databinding.ActivityMainBinding
 import dev.namitala.metas.model.GoalItem
 import dev.namitala.metas.repository.GoalsRepository
@@ -48,6 +52,21 @@ class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, G
 
     }
 
+    private fun showDeleteConfirmation(position: Int) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.confirm_delete))
+            .setPositiveButtonIcon(AppCompatResources.getDrawable(this, R.drawable.icon_confirm))
+            .setNegativeButtonIcon(AppCompatResources.getDrawable(this, R.drawable.icon_cancel))
+            .setNegativeButton("") { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton("") { _, _ ->
+                viewModel.deleteGoal(position)
+                goalsAdapter.notifyItemRemoved(position)
+            }
+            .show()
+    }
+
     private fun openNewGoalBottomSheet() {
         val modal = NewGoalBottomSheet.newInstance()
         modal.listener = this
@@ -87,7 +106,6 @@ class GoalsActivity : AppCompatActivity(), NewGoalBottomSheet.AddGoalListener, G
     }
 
     override fun deleteGoal(position: Int) {
-        viewModel.deleteGoal(position)
-        goalsAdapter.notifyItemRemoved(position)
+        showDeleteConfirmation(position)
     }
 }

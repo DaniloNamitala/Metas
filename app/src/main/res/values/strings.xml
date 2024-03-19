@@ -27,4 +27,5 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="no_goals">Empty List</string>
     <string name="restore_count">Restaurar Contagem</string>
+    <string name="confirm_delete">Confirmar Exclusão?</string>
 </resources>

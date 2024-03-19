@@ -9,4 +9,8 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="buttonIconDimen">5dp</item>
+    </style>
 </resources>
